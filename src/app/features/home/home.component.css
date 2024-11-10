@@ -1,0 +1,42 @@
+.movie {
+    margin-top: 0.5rem;
+    width: 20rem;
+    border: 1px solid gold;
+    background: none;
+}
+
+.con {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.card-title {
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1.25rem;
+}
+
+a:visited, a {
+    color: white
+}
+
+.card-img-top {
+    height: 27rem;
+    margin-bottom: 0.6rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid gold;
+}
+
+a:hover {
+    color: rgb(198, 60, 60);
+    transition: ease;
+}
+
+.spinner-border {
+    width: 7rem;
+    height: 7rem;
+}
+

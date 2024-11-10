@@ -1,0 +1,60 @@
+.card-img {
+    max-height: 40rem;
+    max-width: 25rem;
+}
+
+.container {
+    margin-top: 1rem;
+}
+
+.con {
+    max-width: 35rem;
+}
+
+li {
+    border: 1px solid gold;
+}
+
+.li-han {
+    gap: 0.2rem;
+}
+
+.con-0 {
+    gap: 3rem;
+}
+
+img {
+    border: 1px solid gold;
+    border-radius: 0.6rem;
+}
+
+.spinner-border {
+    width: 5rem;
+    height: 5rem;
+}
+
+.list-group-item {
+    background-color: rgb(0, 0, 0)
+}
+
+.list-group {
+    margin-top: 0.2rem;
+}
+
+a:visited, a {
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(198, 60, 60);
+    transition: ease;
+}
+
+@media screen and (max-width: 572px) {
+    .con-0 {
+        flex-direction: column;
+        align-items: center;
+    }
+}

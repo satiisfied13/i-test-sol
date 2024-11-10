@@ -1,0 +1,58 @@
+
+<ng-container *ngIf="!isLoading">
+    <div class="d-flex justify-content-center mt-3 text-light">
+        <h1 class="card-title">{{ character.name }}</h1>
+    </div>
+</ng-container>
+<div class="d-flex justify-content-center cc">
+    <ng-container *ngIf="!isLoading">
+        <div class="con d-flex justify-content-center text-light">
+            <ul class="list-group">
+                <h2 class="card-title">Details</h2>
+                <li class="list-group-item d-flex flex-row align-items-center text-light">
+                    <p class="card-text"><strong>Gender:</strong> {{ character.gender }}</p>
+                </li>
+                <li class="list-group-item d-flex flex-row align-items-center text-light">
+                    <p class="card-text"><strong>Birth Year:</strong> {{ character.birth_year }}</p>
+                </li>
+                <li class="list-group-item d-flex flex-row align-items-center text-light">
+                    <p class="card-text"><strong>Hair Color:</strong> {{ character.hair_color }}</p>
+                </li>
+                <li class="list-group-item d-flex flex-row align-items-center text-light">
+                    <p class="card-text"><strong>Eye Color:</strong> {{ character.eye_color }}</p>
+                </li>
+                <li class="list-group-item d-flex flex-row align-items-center text-light">
+                    <p class="card-text"><strong>Mass:</strong> {{ character.mass }}</p>
+                </li>
+                <li class="list-group-item d-flex flex-row align-items-center text-light">
+                    <p class="card-text"><strong>Height:</strong> {{ character.height }}</p>
+                </li>
+            </ul>
+        </div>
+        <div class="
+            d-flex
+            justify-content-center
+            ">
+            <div class="con d-flex justify-content-center">
+                <ul class="list-group text-light">
+                    <h2 class="card-title">Films</h2>
+                    <li 
+                        class="
+                            list-group-item 
+                            d-flex 
+                            flex-row 
+                            align-items-center 
+                            text-light
+                            " *ngFor="let movie of movies; let i = index">
+                        <img class="m-img" [src]="movie.image" alt="">
+                        <a [routerLink]="['/films', i]"  class="card-text">{{ movie.title }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-container>
+    
+    <ng-container *ngIf="isLoading">
+        <div class="spinner-border text-warning mt-5"></div>
+    </ng-container>
+</div>

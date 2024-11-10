@@ -1,0 +1,20 @@
+<div class="container con">
+    
+    <ng-container>
+        <div class="card movie" *ngFor="let movie of movies; let i = index">
+            <div class="card-body">
+                <img 
+                    [src]="movie.image"
+                    class="card-img-top">
+                <a 
+                    [routerLink]="['/films', i]" 
+                    class="
+                        card-title
+                        ">{{ movie.title }}</a>
+            </div>
+        </div>
+    </ng-container>
+
+</div>
+
+

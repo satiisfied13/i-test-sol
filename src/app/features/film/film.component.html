@@ -1,0 +1,35 @@
+<div class="
+    container
+    d-flex
+    justify-content-center
+    con-0
+    ">
+    <img [src]="film.image" alt="" class="card-img">
+    <div class="con text-light">
+        <div class="d-flex justify-content-center">
+            <h2 class="card-title">{{ film.title }}</h2>
+        </div>
+        <p class="card-text"><strong>Producer:</strong> {{ film.producer }}</p>
+        <p class="card-text"><strong>Director:</strong> {{ film.director }}</p>
+        <p class="card-text"><strong>Release Date:</strong> {{ film.release_date }}</p>
+        <p class="card-text text-wrap"><strong>Opening Crawl:</strong> {{ film.opening_crawl }}</p>
+        <div class="d-flex justify-content-center">
+            <h3 class="card-text">Characters</h3>
+        </div>
+        <div class="container d-flex justify-content-around flex-wrap li-han">
+            <ng-container *ngIf="!isLoading">
+                <ul class="list-group" *ngFor="let character of characters; let i = index">
+                    <li class="list-group-item text-light">
+                        <a 
+                            [routerLink]="['/character', character.name]" 
+                            [queryParams]="{u: character.url}"
+                            class="card-text">{{ i + 1 }}. {{ character.name }}</a>
+                    </li>
+                </ul>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                <div class="spinner-border text-warning"></div>
+            </ng-container>
+        </div>
+    </div>
+</div>
