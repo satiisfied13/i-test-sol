@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Movie } from "../models/movie.interface";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment.development";
-import { map, tap } from "rxjs";
+import { BehaviorSubject, map, tap } from "rxjs";
 import { Character } from "../models/characters.interface";
 
 @Injectable({providedIn: 'root'})
@@ -10,7 +10,7 @@ import { Character } from "../models/characters.interface";
 export class MovieService {
 
     movies: Movie[] = [];
-    characters: Character[] = [];
+    moviesSubject$: BehaviorSubject<Movie[]> = new BehaviorSubject(null);
 
     imageUrls = [
         'https://m.media-amazon.com/images/I/612h-jwI+EL._AC_UF1000,1000_QL80_.jpg',
@@ -32,6 +32,7 @@ export class MovieService {
                 let clonnedProp = {...key['properties'], image: this.imageUrls[this.movies.length]}
                 this.movies.push(clonnedProp)
             }
+            this.moviesSubject$.next(this.movies);
         }));
     }
 

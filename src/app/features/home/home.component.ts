@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../models/movie.interface';
-import { filter, map } from 'rxjs';
+import { filter, map, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 
@@ -13,15 +13,22 @@ import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/ro
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit, OnDestroy{
 
   movies: Movie[] = [];
+  moviesSub$: Subscription;
 
   constructor(
     private movieService: MovieService
   ){}
 
   ngOnInit(): void {
-    this.movies = this.movieService.movies;
+    this.moviesSub$ = this.movieService.moviesSubject$.subscribe( data => {
+      this.movies = data;
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.moviesSub$.unsubscribe();
   }
 }

@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Movie } from '../../models/movie.interface';
 import { MovieService } from '../../services/movie.service';
-import { filter, forkJoin } from 'rxjs';
+import { filter, forkJoin, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Character } from '../../models/characters.interface';
 import { HttpClient } from '@angular/common/http';
@@ -15,23 +15,22 @@ import { environment } from '../../../environments/environment.development';
   templateUrl: './film.component.html',
   styleUrl: './film.component.css'
 })
-export class FilmComponent implements OnInit{
+export class FilmComponent implements OnInit, OnDestroy{
 
-  re = /(\d+)$/;
   isLoading: boolean = false;
   filmId: number;
   film: Movie; 
-  isFilmChosen: boolean;
   characters: Character[] = [];
+  charactersSub$: Subscription;
+  routeSub$: Subscription;
 
   constructor(
     private route: ActivatedRoute,
-    private movieService: MovieService,
-    private http: HttpClient
+    private movieService: MovieService
   ){}
 
   ngOnInit(): void {
-    this.route.params.subscribe(
+    this.routeSub$ = this.route.params.subscribe(
       data => {
         this.filmId = data['id'];
       }
@@ -43,10 +42,15 @@ export class FilmComponent implements OnInit{
       this.movieService.getCharacters(characterUrl)
     );
 
-    forkJoin(requests).subscribe(
+    this.charactersSub$ = forkJoin(requests).subscribe(
       results => {
         this.characters = results;
         this.isLoading = false;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.charactersSub$.unsubscribe();
+    this.routeSub$.unsubscribe();
   }
 }
