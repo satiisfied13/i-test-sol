@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../models/movie.interface';
-import { filter, map, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { isLoading, loadingSelector, moviesSelector } from '../../reducers/getData';
 
 
 @Component({
@@ -16,19 +17,28 @@ import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/ro
 export class HomeComponent implements OnInit, OnDestroy{
 
   movies: Movie[] = [];
+  isLoading: boolean;
   moviesSub$: Subscription;
+  loadingSub$: Subscription;
 
   constructor(
-    private movieService: MovieService
+    private store: Store
   ){}
 
   ngOnInit(): void {
-    this.moviesSub$ = this.movieService.moviesSubject$.subscribe( data => {
-      this.movies = data;
+    this.loadingSub$ = this.store.select(loadingSelector).subscribe( data => {
+      this.isLoading = data;
     })
+    this.moviesSub$ = this.store.select(moviesSelector).subscribe( data => {
+      this.movies = data;
+      if(this.movies.length > 0) {
+        this.store.dispatch(isLoading({value: false}));
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.moviesSub$.unsubscribe();
+    this.loadingSub$.unsubscribe();
   }
 }

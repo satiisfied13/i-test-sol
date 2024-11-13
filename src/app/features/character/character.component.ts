@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Character } from '../../models/characters.interface';
-import { MovieService } from '../../services/movie.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Movie } from '../../models/movie.interface';
-import { forkJoin, Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { characterSelector, clearData, GET_CHARACTER, isLoading, loadingSelector, moviesSelector } from '../../reducers/getData';
 
 @Component({
   selector: 'app-character',
@@ -15,15 +16,16 @@ import { forkJoin, Subscription } from 'rxjs';
 })
 export class CharacterComponent implements OnInit, OnDestroy{
   character: Character;
-  url;
-  isLoading: boolean = false;
+  url: string;
+  isLoading: boolean;
   movies: Movie[] = [];
   routeSub$: Subscription;
-  moviesSub$: Subscription;
+  characterSub$: Subscription;
+  loadingSub$: Subscription;
 
   constructor(
-    private movieService: MovieService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store
   ){}
 
   ngOnInit(): void {
@@ -33,17 +35,29 @@ export class CharacterComponent implements OnInit, OnDestroy{
       }
     );
 
-    this.isLoading = true;
+    this.loadingSub$ = this.store.select(loadingSelector).subscribe( data => {
+      this.isLoading = data;
+    })
 
-    this.moviesSub$ = this.movieService.getCharacters(this.url).subscribe( data => {
-      this.character = data;
-      this.movies = this.movieService.movies.filter( data => data.characters.includes(this.character.url));
-      this.isLoading = false;
+    this.characterSub$ = this.store.select(moviesSelector).pipe(
+      switchMap(movies => {
+        this.movies = movies;
+        this.store.dispatch(GET_CHARACTER({url: this.url}));
+        return this.store.select(characterSelector)
+      })
+    ).subscribe(char => {
+      this.character = char;
+      this.movies = this.movies.filter(movie => movie.characters.includes(this.character.url));
+      if (this.movies.length > 0) {
+        this.store.dispatch(isLoading({ value: false }));
+      }
     });
   }
 
   ngOnDestroy(): void {
     this.routeSub$.unsubscribe();
-    this.moviesSub$.unsubscribe();
+    this.loadingSub$.unsubscribe();
+    this.characterSub$.unsubscribe();
+    this.store.dispatch(clearData());
   }
 }

@@ -1,6 +1,6 @@
 <div class="container con">
     
-    <ng-container>
+    <ng-container *ngIf="!isLoading">
         <div class="card movie" *ngFor="let movie of movies; let i = index">
             <div class="card-body">
                 <img 
@@ -13,6 +13,10 @@
                         ">{{ movie.title }}</a>
             </div>
         </div>
+    </ng-container>
+
+    <ng-container *ngIf="isLoading">
+        <div class="spinner-border text-warning mt-5"></div>
     </ng-container>
 
 </div>
