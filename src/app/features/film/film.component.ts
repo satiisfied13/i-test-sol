@@ -18,8 +18,8 @@ export class FilmComponent implements OnInit, OnDestroy{
 
   isLoading: boolean = false;
   filmId: number;
-  film: Movie = null; 
-  characters: Character[] = [null];
+  film: Movie; 
+  characters: Character[] = [];
   filmSub$: Subscription;
   charactersSub$: Subscription;
   routeSub$: Subscription;
